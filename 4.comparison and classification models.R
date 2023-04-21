@@ -48,3 +48,14 @@ tree_recall <- tree_cm$byClass["Sensitivity"]
 tree_f1 <- tree_cm$byClass["F1"]
 
 tree_f1
+
+
+
+
+Based on the code and output provided, it appears that the project involves analyzing a dataset of credit customers and attempting to predict whether they are good or bad customers based on various features. The dataset was split into training and testing sets, and two models were created and evaluated: a logistic regression model and a decision tree model.
+
+The logistic regression model achieved an F1 score of 0.573, while the decision tree model achieved a lower F1 score of 0.453. The logistic regression model appears to be the better-performing model overall.
+
+However, it is important to note that the F1 score alone does not provide a complete picture of model performance, and it is important to consider other metrics such as accuracy, precision, and recall as well. It would also be beneficial to perform further analysis on the dataset to identify which features are most important in predicting good or bad customers.
+
+Overall, the analysis presented in this code provides a good starting point for predicting credit customer behavior, but further analysis and refinement of the models may be necessary for more accurate predictions.

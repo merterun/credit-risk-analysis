@@ -4,7 +4,7 @@ library(gridExtra)
 library(cowplot)
 library(lubridate)
 library(GGally)
-
+library(pROC)
 
 # Read in the data
 credit_data <- read.csv("credit_customers.csv")
@@ -14,8 +14,7 @@ summary(credit_data)
 str(credit_data)
 
 #There are more NA values than the other
-credit_data <- credit_data[, names(credit_data) != "own_telephone"]
-
+credit_data <- credit_data[, -19]
 
 
 # Clean the data
@@ -33,9 +32,6 @@ credit_data$job <- factor(credit_data$job, levels = c("unskilled resident", "une
 credit_data$foreign_worker <- factor(credit_data$foreign_worker, levels = c("no", "yes"))
 credit_data$class <- factor(credit_data$class, levels = c("bad", "good"))
 
-
-
-
 # Exploratory Data Analysis (EDA)
 eda_plots <- credit_data %>%
   select(duration, credit_amount, installment_commitment, age, num_dependents, class) %>%
@@ -47,7 +43,6 @@ eda_plots
 train_index <- sample(seq_len(nrow(credit_data)), size = 0.7 * nrow(credit_data))
 train_data <- credit_data[train_index,]
 test_data <- credit_data[-train_index,]
-
 
 model_1 <- glm(class ~ checking_status + duration + credit_history + purpose + 
                  credit_amount + savings_status + employment + installment_commitment + 
@@ -76,39 +71,3 @@ library(pROC)
 roc_data <- roc(test_data$class, probabilities)
 plot(roc_data)
 auc(roc_data)
-
-#Perform recursive feature elimination (RFE) to select top features
-library(caret)
-library(mlr)
-library(mlrCPO)
-
-#library(mice)
-# Impute missing values using mice package
-#imputed_data <- mice(train_data, m = 5, method = "pmm")
-#task <- makeClassifTask(id = "train_data", data = imputed_data, target = "class")
-
-# Define task
-
-task <- makeClassifTask(id = "train_data", data = train_data, target = "class")
-task$desc$feat <- task$desc$feat %>% mutate(levels = list(credit_history = levels(credit_data$credit_history),
-                                                          purpose = levels(credit_data$purpose),
-                                                          job = levels(credit_data$job)))
-
-
-
-
-library(glmnet)
-# Define learner
-learner <- makeLearner("classif.glmnet", predict.type = "prob")
-
-# Define resampling strategy
-resampling <- makeResampleDesc("CV", iters = 5)
-
-# Define the feature selection control options
-ctrl <- makeFeatSelControlSequential(method = "sbs", maxit = 5)
-
-# Define the feature selection method
-feature_selection <- makeFeatSelWrapper(learner, resampling = resampling, control = ctrl)
-
-# Perform feature selection
-selected_features <- selectFeatures(feature_selection, resampling = resampling, control = ctrl, show.info = FALSE)$selected.features

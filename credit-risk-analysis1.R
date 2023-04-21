@@ -54,6 +54,9 @@ test_data <- subset(credit_data, split == FALSE)
 # Remove rows with missing values
 #test_data <- na.omit(test_data)
 
+
+
+#############
 model_1 <- glm(class ~ checking_status + duration + credit_history + purpose + 
                  credit_amount + savings_status + employment + installment_commitment + 
                  personal_status + other_parties + residence_since + property_magnitude + age + 
@@ -74,7 +77,6 @@ predicted_class <- ifelse(probabilities > 0.5, "1", "0")
 
 #Create confusion matrix
 table(actual = test_data$class, predicted = predicted_class)
-
 
 
 #Create ROC curve and calculate AUC

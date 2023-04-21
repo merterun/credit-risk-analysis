@@ -86,7 +86,7 @@ formula <- as.formula("class ~ checking_status + duration + credit_history + pur
 
 feature_range <- c(1:17)
 
-# Use rfe function to perform feature selection
+########## Use rfe function to perform feature selection
 rfe_results <- rfe(train_data[,feature_range], train_data$class, sizes = c(1:17), 
                    rfeControl = rfe_control, method = "glm", verbose = TRUE, 
                    formula = formula)
