@@ -1,1 +1,1 @@
-
+Contains the project steps of **credit-risk-evaluation** repository. In this project, we look at the evaluation of creditworthiness among bank customers. Through an exploratory data analysis, we gain valuable insights into the dataset and identify significant trends within the variables.
